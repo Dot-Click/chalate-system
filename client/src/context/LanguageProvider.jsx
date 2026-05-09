@@ -26,8 +26,9 @@ export const LanguageProvider = ({ children }) => {
     }
   }, [i18n.language]);
 
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
+  const changeLanguage = async (lang) => {
+    await i18n.changeLanguage(lang);
+    window.location.reload();
   };
 
   return (
