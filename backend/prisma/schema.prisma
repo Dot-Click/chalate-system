@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and user management
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String
+  fullName          String?
+  role              UserRole   @default(USER)
+  image             String?
+  resetToken        String?    @unique
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  // Relations
+  bookings         Booking[]
+  reviews          Review[]
+  notifications    Notification[]
+
+  @@map("users")
+}
+
+// Enum for user roles
+enum UserRole {
+  USER
+  MANAGER
+  ADMIN
+}
+
+// Chalet model for property listings
+model Chalet {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  location    String
+  price       Float
+  bedrooms    Int
+  bathrooms   Int
+  maxGuests   Int
+  isAvailable Boolean  @default(true)
+  images      String[]
+  amenities   String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  bookings Booking[]
+  reviews  Review[]
+
+  @@map("chalets")
+}
+
+// Booking model for reservations
+model Booking {
+  id         String      @id @default(cuid())
+  checkIn    DateTime
+  checkOut   DateTime
+  totalPrice Float
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  // Foreign keys
+  userId  String
+  chaletId String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chalet Chalet @relation(fields: [chaletId], references: [id], onDelete: Cascade)
+
+  @@map("bookings")
+}
+
+// Enum for booking status
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// Review model for chalet ratings
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Foreign keys
+  userId  String
+  chaletId String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chalet Chalet @relation(fields: [chaletId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chaletId])
+  @@map("reviews")
+}
+
+// Notification model for user notifications
+model Notification {
+  id        String           @id @default(cuid())
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  // Foreign key
+  userId String
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+// Enum for notification types
+enum NotificationType {
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  SYSTEM_UPDATE
+}

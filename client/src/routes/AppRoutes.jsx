@@ -9,6 +9,9 @@ import Dashboard from '../pages/admin/Dashboard';
 import ChaletManagement from '../pages/admin/ChaletManagement';
 import CategoryManagement from '../pages/admin/CategoryManagement';
 import BookingManagement from '../pages/admin/BookingManagement';
+import CalendarPage from '../pages/admin/CalendarPage';
+import AmenitiesManagement from '../pages/admin/AmenitiesManagement';
+import SettingsPage from '../pages/admin/SettingsPage';
 import Navbar from '../components/common/Navbar';
 import { cn } from '@/lib/utils';
 
@@ -38,6 +41,9 @@ const AppRoutes = () => {
           <Route path="/admin/chalets" element={<ChaletManagement />} />
           <Route path="/admin/categories" element={<CategoryManagement />} />
           <Route path="/admin/bookings" element={<BookingManagement />} />
+          <Route path="/admin/calendar" element={<CalendarPage />} />
+          <Route path="/admin/amenities" element={<AmenitiesManagement />} />
+          <Route path="/admin/settings" element={<SettingsPage />} />
         </Routes>
       </main>
     </div>

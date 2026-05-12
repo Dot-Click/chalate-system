@@ -5,6 +5,7 @@ import {
   Home, 
   Layers, 
   Calendar, 
+  CalendarRange,
   Users, 
   Star, 
   Settings, 
@@ -13,7 +14,8 @@ import {
   ChevronRight,
   BarChart3,
   Bell,
-  Wallet
+  Wallet,
+  Building2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
@@ -28,6 +30,8 @@ const AdminSidebar = ({ isCollapsed, setIsCollapsed }) => {
     { name: t('admin.chalets'), icon: <Home />, path: '/admin/chalets' },
     { name: t('admin.categories'), icon: <Layers />, path: '/admin/categories' },
     { name: t('admin.bookings'), icon: <Calendar />, path: '/admin/bookings' },
+    { name: 'Calendar', icon: <CalendarRange />, path: '/admin/calendar' },
+    { name: 'Amenities', icon: <Building2 />, path: '/admin/amenities' },
     { name: t('admin.settings'), icon: <Settings />, path: '/admin/settings' },
   ];
 
